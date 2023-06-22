@@ -1,4 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask import flash
 
 class User:
     DB = "login_and_registration_schema"  
@@ -12,8 +13,9 @@ class User:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
-
-    @staticmethod
+    # Static methods don't have self or cls passed into the parameters.
+    # We do need to take in a parameter to represent our user.
+    @staticmethod       
     def validate_user(user):
         is_valid = True # we assume this is true
         if len(user['first_name']) < 3:
@@ -22,11 +24,8 @@ class User:
         if len(user['last_name']) < 3:
             flash("Last name must be at least 3 characters.")
             is_valid = False
-        if len(user['email']) < 5:
-            flash("email must be at least 5 characters.")
-            is_valid = False
-        if len(burger['password']) < 6:
-            flash("Bun must be at least 6 characters.")
+        if len(user['password']) < 6:
+            flash("Password must be at least 6 characters.")
             is_valid = False
         return is_valid
     
@@ -40,11 +39,28 @@ class User:
         result = connectToMySQL(cls.DB).query_db(query,data)
         return result
     
-    @classmethod    #<------- GET ALL
+    @classmethod    #<------- GET ALL METHOD
     def get_all(cls, data):
         query = "SELECT * FROM users;"
-        results = connectToMySQL(cls.DB).query_db(query)
+        results = connectToMySQL(cls.DB).query_db(query, data)
         users = []
         for u in results:
             users.append(cls(u))
         return users
+    
+    @classmethod     #<----- GET ONE METHOD
+    def GetUserByID(cls, data):
+        query = """
+        SELECT FROM users
+        WHERE id = %(id)s
+        """
+        results = connectToMySQL(cls.DB).query_db(query, data)
+        return results
+    
+    @classmethod       #<----- GET ONE METHOD
+    def GetUserByEmail(cls, data):
+        query = """
+        SELECT FROM users
+        WHERE email = %(email)s
+        """
+        results = connectToMySQL(cls.DB).query_db(query, data)

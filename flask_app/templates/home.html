@@ -9,7 +9,7 @@
     
 </head>
 <body class="d-flex justify-content-around">
-        <form action='/register_user' methods='POST' class="container w-25 border border-black">
+        <form action='/user/validate' method='POST' class="container w-25 border border-black">
             <h1 class="display-4 text-center">Register</h1>
             <div class="form-group mb-3">
                 <label class="form-label" for="first_name">First Name:</label>
@@ -46,5 +46,14 @@
             </div>
             <input class="btn btn-success" type="submit" value="Login">
         </form>
-</body>
+        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+    {% if messages %}                            <!-- check if there are any messages -->
+        {% for message in messages %}            <!-- loop through the messages -->
+            <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+    </body>
 </html>
