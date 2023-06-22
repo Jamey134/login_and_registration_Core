@@ -7,9 +7,8 @@ bcrypt = Bcrypt(app)
 
 
 @app.route('/')
-def home():
-    return redirect('/user')
-
-@app.route('/user')
-def home():
+@app.route('/user', methods = ['POST'])
+def home(request.form):
+    User.save
     return render_template('home.html')
+

@@ -9,7 +9,7 @@
     
 </head>
 <body class="d-flex justify-content-around">
-        <form action='/' method='POST' class="container w-25 border border-black">
+        <form action='/register_user' methods='POST' class="container w-25 border border-black">
             <h1 class="display-4 text-center">Register</h1>
             <div class="form-group mb-3">
                 <label class="form-label" for="first_name">First Name:</label>
@@ -34,7 +34,7 @@
             <input class="btn btn-primary" type="submit" value="Register">
         </form>
         
-        <form action='/' method='POST' class="container w-25 border border-black">
+        <form action='/login_user_' methods='POST' class="container w-25 border border-black">
             <h1 class="display-4 text-center">Login</h1>
             <div class="form-group mb-3">
                 <label class="form-label" for="email">Email:</label>
@@ -44,6 +44,7 @@
                 <label class="form-label" for="password">Password:</label>
                 <input type="text" name="password" class="form-control">
             </div>
+            <input class="btn btn-success" type="submit" value="Login">
         </form>
 </body>
 </html>
