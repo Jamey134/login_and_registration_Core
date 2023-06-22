@@ -13,6 +13,24 @@ class User:
         self.updated_at = data['updated_at']
 
 
+    @staticmethod
+    def validate_user(user):
+        is_valid = True # we assume this is true
+        if len(user['first_name']) < 3:
+            flash("First name must be at least 3 characters.")
+            is_valid = False
+        if len(user['last_name']) < 3:
+            flash("Last name must be at least 3 characters.")
+            is_valid = False
+        if len(user['email']) < 5:
+            flash("email must be at least 5 characters.")
+            is_valid = False
+        if len(burger['password']) < 6:
+            flash("Bun must be at least 6 characters.")
+            is_valid = False
+        return is_valid
+    
+    
     @classmethod     #<--------- CREATE or EDIT
     def save(cls, data):
         query = """
