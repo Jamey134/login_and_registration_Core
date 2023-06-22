@@ -1,5 +1,9 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
+# the regex module
+import re 
+# create a regular expression object that we'll use later   
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
 class User:
     DB = "login_and_registration_schema"  
@@ -24,9 +28,13 @@ class User:
         if len(user['last_name']) < 3:
             flash("Last name must be at least 3 characters.")
             is_valid = False
-        if len(user['password']) < 6:
-            flash("Password must be at least 6 characters.")
+        if len(user['password']) < 4:
+            flash("Password must be at least 4 characters or more.")
             is_valid = False
+        if not EMAIL_REGEX.match(user['email']):
+            flash("Please enter valid email address.")
+        if user['password'] != ['confirm_password']:
+            flash('Password did not match.')
         return is_valid
     
     
@@ -40,9 +48,9 @@ class User:
         return result
     
     @classmethod    #<------- GET ALL METHOD
-    def get_all(cls, data):
+    def get_all(cls):
         query = "SELECT * FROM users;"
-        results = connectToMySQL(cls.DB).query_db(query, data)
+        results = connectToMySQL(cls.DB).query_db(query)
         users = []
         for u in results:
             users.append(cls(u))
@@ -64,3 +72,4 @@ class User:
         WHERE email = %(email)s
         """
         results = connectToMySQL(cls.DB).query_db(query, data)
+        return results
