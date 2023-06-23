@@ -41,8 +41,8 @@ class User:
     @classmethod     #<--------- CREATE or EDIT
     def save(cls, data):
         query = """
-    INSERT INTO users (first_name,last_name,email,password)
-    VALUES (%(first_name)s,%(last_name)s,%(email)s,%(password)s);
+    INSERT INTO users (id,first_name,last_name,email,password)
+    VALUES (%(id)s, %(first_name)s,%(last_name)s,%(email)s,%(password)s);
     """
         result = connectToMySQL(cls.DB).query_db(query,data)
         return result
@@ -58,18 +58,16 @@ class User:
     
     @classmethod     #<----- GET ONE METHOD
     def GetUserByID(cls, data):
-        query = """
-        SELECT FROM users
-        WHERE id = %(id)s
-        """
+        query = "SELECT * FROM users WHERE id = %(id)s; "
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
     
     @classmethod       #<----- GET ONE METHOD
     def GetUserByEmail(cls, data):
         query = """
-        SELECT FROM users
-        WHERE email = %(email)s
+        SELECT * FROM users
+        WHERE email = %(email)s;
         """
         results = connectToMySQL(cls.DB).query_db(query, data)
+        print(results)
         return results
