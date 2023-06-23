@@ -1,5 +1,5 @@
 from flask_app import app
-from flask import render_template, redirect, request, session
+from flask import render_template, redirect, request, session, flash
 from flask_bcrypt import Bcrypt
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app.model.user_model import User
@@ -33,6 +33,8 @@ def validateUser():
 
 @app.route('/testSuccess')
 def loginSuccess():
+    if "user_id" not in session:
+        return redirect('/') #<---- be on every routhe except the "/" route.
     user=User.GetUserByID({'id':session['user_id']})
     print(user)
     return render_template('welcomeUser.html', user = user)
@@ -42,7 +44,17 @@ def loginSuccess():
 def loginUser():
     login_data = {'email':request.form['email']}
     user_in_db = User.GetUserByEmail(login_data)
-    session['user_id'] = user_in_db[0]['id']
+    if not user_in_db:
+            flash("invalid email/password.")
+            return redirect('/')
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        # if we get False after checking the password
+        flash("Invalid Email/Password")
+        return redirect('/')
+
+
+    user_in_db = User.GetUserByEmail(login_data)
+    session['user_id'] = user_in_db.id
     print(session['user_id'])
     return redirect('/testSuccess')
 

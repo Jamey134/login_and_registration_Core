@@ -70,4 +70,4 @@ class User:
         """
         results = connectToMySQL(cls.DB).query_db(query, data)
         print(results)
-        return results
+        return cls(results[0])
