@@ -6,10 +6,10 @@ import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
 class User:
-    DB = "login_and_registration_schema"  
+    DB = "tv_shows_schema"  
 
     def __init__(self, data):
-        self.id = data['id']
+        self.user_id = data['user_id']
         self.first_name = data['first_name']
         self.last_name = data['last_name']
         self.email = data['email']
@@ -37,13 +37,24 @@ class User:
             flash('Password did not match.')
         return is_valid
     
+    @staticmethod  
+    def validateUpdate(user):
+        is_valid = True
+        if len(user['first_name']) < 3:
+            flash("First name must be at least 3 characters.")
+            is_valid = False
+        if len(user['last_name']) < 3:
+            flash("Last name must be at least 3 characters.")
+            is_valid = False
+        return is_valid
     
-    @classmethod     #<--------- CREATE or EDIT
-    def save(cls, data):
+    @classmethod     #<--------- CREATE FUNCTION
+    def create(cls, data):
         query = """
-    INSERT INTO users (id,first_name,last_name,email,password)
-    VALUES (%(id)s, %(first_name)s,%(last_name)s,%(email)s,%(password)s);
+    INSERT INTO users (first_name,last_name,email,password)
+    VALUES (%(first_name)s,%(last_name)s,%(email)s,%(password)s);
     """
+        print('here', data)
         result = connectToMySQL(cls.DB).query_db(query,data)
         return result
     
@@ -58,7 +69,7 @@ class User:
     
     @classmethod     #<----- GET ONE METHOD
     def GetUserByID(cls, data):
-        query = "SELECT * FROM users WHERE id = %(id)s; "
+        query = "SELECT * FROM users WHERE user_id = %(id)s; "
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
     
@@ -71,3 +82,12 @@ class User:
         results = connectToMySQL(cls.DB).query_db(query, data)
         print(results)
         return cls(results[0])
+    
+    @classmethod   #<-----UPDATE FUNCTION
+    def edit(cls, data):
+        query = """UPDATE users 
+                SET first_name=%(first_name)s,last_name=%(last_name)s 
+                WHERE user_id = %(user_id)s;
+                """
+        print("HERE------->", data)
+        return connectToMySQL(cls.DB).query_db(query,data)

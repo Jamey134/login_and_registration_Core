@@ -1,1 +1,0 @@
-SELECT * FROM login_and_registration_schema.users;
