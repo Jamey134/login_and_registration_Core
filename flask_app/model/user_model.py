@@ -5,13 +5,13 @@ import re
 # create a regular expression object that we'll use later   
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
-class User:
+class User: #<----- MODEL CLASS
     DB = "tv_shows_schema"  
 
-    def __init__(self, data):
+    def __init__(self, data): #<---- CLASS DICTIONARY
         self.user_id = data['user_id']
         self.first_name = data['first_name']
-        self.last_name = data['last_name']
+        self.last_name = data['last_name']#<---- KEYS AMD VALUES MUST MATCH WHAT'S IN MYSQL
         self.email = data['email']
         self.password = data['password']
         self.created_at = data['created_at']
@@ -38,7 +38,7 @@ class User:
         return is_valid
     
     @staticmethod  
-    def validateUpdate(user):
+    def validateUpdate(user): #<--- USED FOR VALIDATING USER IN ORDER TO UPDATE INFO
         is_valid = True
         if len(user['first_name']) < 3:
             flash("First name must be at least 3 characters.")
@@ -58,29 +58,29 @@ class User:
         result = connectToMySQL(cls.DB).query_db(query,data)
         return result
     
-    @classmethod    #<------- GET ALL METHOD
-    def get_all(cls):
+    @classmethod    #<----- GET ALL METHOD (READ)
+    def get_all(cls): #<----- ONLY ADD CLASS IN PARAMETER
         query = "SELECT * FROM users;"
         results = connectToMySQL(cls.DB).query_db(query)
-        users = []
+        users = [] #<--- CREATE VARIABLE WITH EMPTY LIST TO RETURN REQUESTED DATA 
         for u in results:
             users.append(cls(u))
         return users
     
-    @classmethod     #<----- GET ONE METHOD
+    @classmethod     #<----- GET ONE METHOD (BY ID)(READ)
     def GetUserByID(cls, data):
         query = "SELECT * FROM users WHERE user_id = %(id)s; "
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
     
-    @classmethod       #<----- GET ONE METHOD
+    @classmethod    #<----- GET ONE METHOD (BY EMAIL)(READ)
     def GetUserByEmail(cls, data):
         query = """
         SELECT * FROM users
         WHERE email = %(email)s;
         """
         results = connectToMySQL(cls.DB).query_db(query, data)
-        print(results)
+        print(results) #<---- USED FOR TESTING MY FUNCTION
         return cls(results[0])
     
     @classmethod   #<-----UPDATE FUNCTION
@@ -91,3 +91,9 @@ class User:
                 """
         print("HERE------->", data)
         return connectToMySQL(cls.DB).query_db(query,data)
+    
+    @classmethod #<----- DELETE METHOD
+    def delete(cls, user_id): #<---- ADD CLASS AND ID INTO PARAMETER
+        query  = "DELETE FROM users WHERE user_id = %(user_id)s;"
+        data = {"user_)id": user_id}
+        return connectToMySQL(cls.DB).query_db(query, data)

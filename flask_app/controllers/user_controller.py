@@ -12,21 +12,21 @@ def home():
     return render_template('home.html')
 
 #THIS FUNCTION CREATES THE USER
-@app.route('/user/create', methods=['POST'])
+@app.route('/user/create', methods=['POST']) #<--- METHOD POST ALWAYS GO WITH THE REDIRECT FUNCTION.
 #THIS IS VALIDATING THE USER
 def validateUser():
 #IF USER IS INVALID, THEN USER WILL BE SENT TO HOMEPAGE
     if not User.validate_user(request.form):
         return redirect('/')
     pw_hash = bcrypt.generate_password_hash(request.form['password'])
-
+#THIS IS WHERE I CREATE A DIC FOR THE FUNCTION TO GRAB DATA FROM THE MODEL CLASS
     userData = {
         'first_name': request.form['first_name'],
         'last_name': request.form['last_name'],
         'email': request.form['email'],
         'password': pw_hash
     }
-
+# CREATE A VARIABLE TO 
     user = User.create(userData)
     session['user_id'] = user
     print('new_user:', user)
@@ -60,7 +60,7 @@ def loginUser():
     return redirect('/testSuccess')
 
 
-@app.route('/logout')
+@app.route('/logout') #<--- USE ROUTE FOR ALL APPS
 def logout():
     session.clear()
     return redirect('/')
@@ -72,7 +72,7 @@ def editUser():
     print('HERE', editUser)
     return render_template('editUser.html', editUser = editUser[0])
 
-@app.route('/user/update',methods=['POST'])
+@app.route('/user/update',methods=['POST']) #METHODS POST IS NEEDED
 def updateUser():
     if not User.validateUpdate(request.form):
         return redirect('/user/edit/')
