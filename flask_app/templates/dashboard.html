@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,37 +10,41 @@
 
     <title>Dashboard</title>
 </head>
-<body>
-    <button><a href="/user/edit/">Edit</a></button>
-        <div class="display-1">
-            <h1>Howdy {{user.first_name}}</h1>
-            <a href="/logout">logout</a>
-        </div>
-        <table>
-            <th>All TV Shows</th>
-            <tr>
-                <td>Title</td>
-                <td>Network</td>
-                <td>Realease Date</td>
-                <td>Actions</td>
-            </tr>
-            {% for one_show in all_shows %}
-            <tr>
-                <td>{{one_show['title']}}</td>
-                <td>{{one_show['network']}}</td>
-                <td>{{one_show['release_date']}}</td>
-                <td><a href="/show/{{one_show.show_id}}">Show</a> | <a href="/{{one_show.show_id}}/editShow">Edit</a> | <a href="/delete/{{one_show.show_id}}">Delete</a></td>
-            </tr>
-            {%endfor%}
-        </table>
-        <a href="/newShow">Add new show</a>
-        <div>
-            {%for one_user in all_users%}
-            <p>first name {{one_user['first_name']}}</p>
-            {%endfor%}
-        </div>
-        
 
-    </div></div>
+<body>
+    <div class="text-end">
+        <a href='/newShow'>Create Show</a>
+        <button><a href="/user/edit/">Edit</a></button>
+        <button><a href="/logout">logout</a></button>
+    </div>
+    
+    <div>
+        <h1>Howdy {{user.first_name}}</h1>
+    </div>
+    <h3>All TV Shows</h3>
+    <table class="bg-light text-black d-flex", method = [POST]>
+        <tr>
+            <th>Title:</th>
+            <th>Network:</th>
+            <th>Realease Date:</th>
+            <th>Actions:</th>
+        </tr>
+        {% for one_show in all_shows %}
+        <tr>
+            <td>{{one_show['title']}}</td>
+            <td>{{one_show['network']}}</td>
+            <td>{{one_show['release_date']}}</td>
+            <td><a href="/show/{{one_show.show_id}}">Show</a> | <a href="/{{one_show.show_id}}/editShow">Edit</a> | <a
+                    href="/delete/{{one_show.show_id}}">Delete</a></td>
+        </tr>
+        {%endfor%}
+    </table>
+    
+
+
+
+    </div>
+    </div>
 </body>
+
 </html>

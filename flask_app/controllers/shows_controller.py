@@ -7,9 +7,15 @@ from flask_app.model.shows_model import Shows
 bcrypt = Bcrypt(app)
 
 
-app.route('/newShow')
+@app.route('/newShow')
 def newShowForm():
     return render_template('newShow.html')
+
+@app.route('/addShow', methods=['POST'])
+def addShow():
+    Shows.addShow(request.form)
+    return redirect('/dashboard')
+
 
 
 

@@ -6,9 +6,10 @@ import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
 class User: #<----- MODEL CLASS
-    DB = "tv_shows_schema"  
+    #"DB" TO STORE MYSQL SCHEMA
+    DB = "tv_shows_schema"  #<----- CREATE VARIABLE 
 
-    def __init__(self, data): #<---- CLASS DICTIONARY
+    def __init__(self, data): #<---- INITIATE FUNCTION TO CREATE THE OBJECT AND VAIDATES THE USER.
         self.user_id = data['user_id']
         self.first_name = data['first_name']
         self.last_name = data['last_name']#<---- KEYS AMD VALUES MUST MATCH WHAT'S IN MYSQL
@@ -48,7 +49,7 @@ class User: #<----- MODEL CLASS
             is_valid = False
         return is_valid
     
-    @classmethod     #<--------- CREATE FUNCTION
+    @classmethod  #<--------- CREATE FUNCTION
     def create(cls, data):
         query = """
     INSERT INTO users (first_name,last_name,email,password)
@@ -67,13 +68,13 @@ class User: #<----- MODEL CLASS
             users.append(cls(u))
         return users
     
-    @classmethod     #<----- GET ONE METHOD (BY ID)(READ)
+    @classmethod  #<----- GET ONE METHOD (BY ID)(READ)
     def GetUserByID(cls, data):
         query = "SELECT * FROM users WHERE user_id = %(id)s; "
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
     
-    @classmethod    #<----- GET ONE METHOD (BY EMAIL)(READ)
+    @classmethod  #<----- GET ONE METHOD (BY EMAIL)(READ)
     def GetUserByEmail(cls, data):
         query = """
         SELECT * FROM users
@@ -83,8 +84,8 @@ class User: #<----- MODEL CLASS
         print(results) #<---- USED FOR TESTING MY FUNCTION
         return cls(results[0])
     
-    @classmethod   #<-----UPDATE FUNCTION
-    def edit(cls, data):
+    @classmethod #<-----UPDATE FUNCTION
+    def edit(cls, data): 
         query = """UPDATE users 
                 SET first_name=%(first_name)s,last_name=%(last_name)s 
                 WHERE user_id = %(user_id)s;
@@ -92,8 +93,13 @@ class User: #<----- MODEL CLASS
         print("HERE------->", data)
         return connectToMySQL(cls.DB).query_db(query,data)
     
+    # the delete method will be used when we need to delete an user from our database
     @classmethod #<----- DELETE METHOD
     def delete(cls, user_id): #<---- ADD CLASS AND ID INTO PARAMETER
-        query  = "DELETE FROM users WHERE user_id = %(user_id)s;"
-        data = {"user_)id": user_id}
+        query  = """DELETE FROM users 
+        WHERE user_id = %(id)s;
+        """ #<--- THIS WILL DELETE ENTIRE ROW BY SELECTING ID
+        data = {"user_id": user_id}
         return connectToMySQL(cls.DB).query_db(query, data)
+    
+
