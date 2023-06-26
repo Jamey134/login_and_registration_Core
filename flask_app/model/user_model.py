@@ -72,7 +72,7 @@ class User: #<----- MODEL CLASS
     def GetUserByID(cls, data):
         query = "SELECT * FROM users WHERE user_id = %(id)s; "
         results = connectToMySQL(cls.DB).query_db(query, data)
-        return results
+        return cls(results[0])
     
     @classmethod  #<----- GET ONE METHOD (BY EMAIL)(READ)
     def GetUserByEmail(cls, data):

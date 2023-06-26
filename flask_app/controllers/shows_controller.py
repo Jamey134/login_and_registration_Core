@@ -14,9 +14,9 @@ def loginSuccess():
         flash("PLEASE LOGIN!")
         return redirect('/')  #<--- be on every route except the "/" route.
     user = User.GetUserByID({'id': session['user_id']})
-    
-    print(user)
-    return render_template('dashboard.html', user=user)
+    all_shows = Shows.get_all_shows()
+    print(all_shows[0])
+    return render_template('dashboard.html', user=user, all_shows = all_shows)
 
 
 # DIRECTS USER TO NEWSHOW.HTML TO ADD NEW SHOW
@@ -37,10 +37,7 @@ def addShow():
     return redirect('/dashboard')
 
 #EDIT A SHOW
-@app.route('/editShow/<int:show_id')
+@app.route('/editShow/<int:show_id>')
 def editShow(show_id):
-    query = "SELECT * FROM shows WHERE show_id = %(id)s"
-    data = {'id': show_id}
-    mysql = connectToMySQL('examdb')
-    show = mysql.query_db(query, data)
-    return render_template("editShow.html", show = show[0])
+    show = Shows.get_one_show_info(show_id)
+    return render_template("editShow.html", show = show)
