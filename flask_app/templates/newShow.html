@@ -21,9 +21,9 @@
             <p class="text-danger">Description must not be blank</p>
         </div>
     </div>
-    
-    <form action="/addShow" method="POST">
 
+    <form action="/addShow" method="POST">
+        <input type="hidden" name="ID" value="{{session['user_id']}}"> 
         <div class="col-4">
             <div class="d-flex justify-content-between gap-3 mb-3">
                 <label for="title">Title:</label>
@@ -42,21 +42,21 @@
                 <br>
                 <textarea name="description" cols="50" rows="5"></textarea>
             </div>
-                <input class="btn btn-primary" type="submit" value="Add">
-            </form>
-            <div>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                {% for message in messages %}
-                <p>{{message}}</p>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
-            </div>
-        </div>
+            <input class="btn btn-primary" type="submit" value="Add">
+    </form>
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    </div>
 
-        
-    
+
+
 
 </body>
 
