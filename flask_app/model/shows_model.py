@@ -32,7 +32,7 @@ class Shows:
             is_valid = False
         return is_valid
 
-    @classmethod
+    @classmethod   #<----- Create show
     def addShow(cls, data):
         query = """
         INSERT INTO shows (title, network, release_date, description, USER_id)
