@@ -11,9 +11,16 @@
 </head>
 
 <body>
-    <div class="display-1">
-        <h1>Howdy {{user.first_name}}</h1>
-        <h1>Edit {{show.title}}</h1>
+    <div class="d-flex justify-content-between p-3">
+        <div class="d-flex flex-column">
+            <h1>Edit Show</h1>
+            <p class="text-danger">Date must not be blank</p>
+        </div>
+        <div class="d-flex align-items-end gap-3 p-3">
+            <a href="/dashboard">TV Shows</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
         
         {% with messages = get_flashed_messages() %}
         {% if messages %}
