@@ -34,15 +34,6 @@ def validateUser():
     print('new_user:', user)
     return redirect('/dashboard')
 
-#DASHBOARD
-@app.route('/dashboard') 
-def loginSuccess():
-    if "user_id" not in session:
-        return redirect('/')  #<--- be on every route except the "/" route.
-    user = User.GetUserByID({'id': session['user_id']})
-    print(user)
-    return render_template('dashboard.html', user=user)
-
 
 @app.route('/login_user', methods=['POST'])
 def loginUser():
@@ -66,7 +57,7 @@ def logout():
     session.clear()
     return redirect('/')
 
-
+#==============EXTRA ROUTES FOR FUTURE EXAM===========
 @app.route('/user/edit/')
 def editUser():
     if "user_id" not in session:

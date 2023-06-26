@@ -17,29 +17,34 @@
         <button><a href="/user/edit/">Edit</a></button>
         <button><a href="/logout">logout</a></button>
     </div>
-    
+
     <div>
         <h1>Howdy {{user.first_name}}</h1>
     </div>
     <h3>All TV Shows</h3>
-    <table class="bg-light text-black d-flex", method = [POST]>
-        <tr>
-            <th>Title:</th>
-            <th>Network:</th>
-            <th>Realease Date:</th>
-            <th>Actions:</th>
-        </tr>
-        {% for one_show in all_shows %}
-        <tr>
-            <td>{{one_show['title']}}</td>
-            <td>{{one_show['network']}}</td>
-            <td>{{one_show['release_date']}}</td>
-            <td><a href="/show/{{one_show.show_id}}">Show</a> | <a href="/{{one_show.show_id}}/editShow">Edit</a> | <a
-                    href="/delete/{{one_show.show_id}}">Delete</a></td>
-        </tr>
-        {%endfor%}
+    <table class="bg-light text-black d-flex, table" , method=[POST]>
+        <thead>
+            <tr>
+                <th>Title:</th>
+                <th>Network:</th>
+                <th>Realease Date:</th>
+                <th>Actions:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for one_show in all_shows %}
+            <tr>
+                <td>{{one_show['title']}}</td>
+                <td>{{one_show['network']}}</td>
+                <td>{{one_show['release_date']}}</td>
+                <td><a href="/show/{{one_show.show_id}}">Show</a> | <a href="/{{one_show.show_id}}/editShow">Edit</a> |
+                    <a href="/delete/{{one_show.show_id}}">Delete</a></td>
+            </tr>
+            {%endfor%}
+        </tbody>
+
     </table>
-    
+
 
 
 

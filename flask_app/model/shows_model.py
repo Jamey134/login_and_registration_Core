@@ -56,3 +56,6 @@ class Shows:
             shows.append(cls(s))
         return shows
     
+    @classmethod
+    def viewShow(show_id):
+        query = 
