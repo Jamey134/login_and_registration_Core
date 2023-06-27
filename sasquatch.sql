@@ -1,0 +1,1 @@
+SELECT * FROM sasquatch_schema.users;

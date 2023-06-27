@@ -7,10 +7,10 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class User: #<----- MODEL CLASS
     #"DB" TO STORE MYSQL SCHEMA
-    DB = "tv_shows_schema"  #<----- CREATE VARIABLE 
+    DB = "sasquatch_schema"  #<----- CREATE VARIABLE 
 
     def __init__(self, data): #<---- INITIATE FUNCTION TO CREATE THE OBJECT AND VAIDATES THE USER.
-        self.user_id = data['user_id']
+        self.id = data['id']
         self.first_name = data['first_name']
         self.last_name = data['last_name']#<---- KEYS AMD VALUES MUST MATCH WHAT'S IN MYSQL
         self.email = data['email']
@@ -68,9 +68,11 @@ class User: #<----- MODEL CLASS
             users.append(cls(u))
         return users
     
+
+    
     @classmethod  #<----- GET ONE METHOD (BY ID)(READ)
     def GetUserByID(cls, data):
-        query = "SELECT * FROM users WHERE user_id = %(id)s; "
+        query = "SELECT * FROM users WHERE id = %(id)s;"
         results = connectToMySQL(cls.DB).query_db(query, data)
         return cls(results[0])
     
@@ -88,18 +90,18 @@ class User: #<----- MODEL CLASS
     def edit(cls, data): 
         query = """UPDATE users 
                 SET first_name=%(first_name)s,last_name=%(last_name)s 
-                WHERE user_id = %(user_id)s;
+                WHERE id = %(id)s;
                 """
         print("HERE------->", data)
         return connectToMySQL(cls.DB).query_db(query,data)
     
     # the delete method will be used when we need to delete an user from our database
-    @classmethod #<----- DELETE METHOD
-    def delete(cls, user_id): #<---- ADD CLASS AND ID INTO PARAMETER
-        query  = """DELETE FROM users 
-        WHERE user_id = %(id)s;
-        """ #<--- THIS WILL DELETE ENTIRE ROW BY SELECTING ID
-        data = {"user_id": user_id}
-        return connectToMySQL(cls.DB).query_db(query, data)
+    # @classmethod #<----- DELETE METHOD
+    # def delete(cls, user_id): #<---- ADD CLASS AND ID INTO PARAMETER
+    #     query  = """DELETE FROM users 
+    #     WHERE id = %(id)s;
+    #     """ #<--- THIS WILL DELETE ENTIRE ROW BY SELECTING ID
+    #     data = {"id": id}
+    #     return connectToMySQL(cls.DB).query_db(query, data)
     
 

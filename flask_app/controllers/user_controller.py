@@ -3,7 +3,7 @@ from flask import render_template, redirect, request, session, flash
 from flask_bcrypt import Bcrypt
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app.model.user_model import User
-from flask_app.model.shows_model import Shows
+from flask_app.model.sasquatch_model import Sasquatch
 bcrypt = Bcrypt(app)
 
 #App Routing means mapping the URLs to a specific function that will handle the logic for that URL.
@@ -30,7 +30,7 @@ def validateUser():
     }
 # CREATE A VARIABLE TO CALL CLASS FUNCTION WITH DIC ABOVE.
     user = User.create(userData)
-    session['user_id'] = user
+    session['id'] = user
     print('new_user:', user)
     return redirect('/dashboard')
 
@@ -47,8 +47,8 @@ def loginUser():
         flash("Invalid Email/Password")
         return redirect('/')
 
-    session['user_id'] = user_in_db.user_id
-    print(session['user_id'])
+    session['id'] = user_in_db.id
+    print(session['id'])
     return redirect('/dashboard') #<--- REROUTE TO DASHBOARD.HTML
 
 
@@ -64,7 +64,7 @@ def editUser():
         return redirect('/') 
     editUser = User.GetUserByID({'id':session['user_id']}) 
     print('HERE', editUser)
-    return render_template('editUser.html', editUser = editUser[0])
+    return render_template('editUser.html', editUser = editUser)
 
 @app.route('/user/update',methods=['POST']) #METHODS POST IS NEEDED
 def updateUser():
@@ -78,10 +78,4 @@ def updateUser():
     User.edit(userData) #<--- CALLING THE FUNCTION FROM CLASS AND ENTERING DATA IN PARAMETER
     return redirect('/testSuccess')#<--- REROUTE TO DASHBOARD.HTML
 
-@app.route('/user/delete/<int:user_id>') #<--- Add ID in parameter to target a specific user
-def delete(user_id): #<--- ADD ID INTO PARAMETER
-    if "user_id" not in session:
-        return redirect('/') 
-    User.delete(user_id) #<--- Calling the function targeting user_id's
-    return redirect('/') #<--- TAKES US BACK TO HOMEPAGE
 
