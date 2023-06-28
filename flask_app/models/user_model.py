@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
+from flask_app.models import tree_model
 # the regex module
 import re 
 # create a regular expression object that we'll use later   
@@ -7,7 +8,7 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class User: #<----- MODEL CLASS
     #"DB" TO STORE MYSQL SCHEMA
-    DB = "sasquatch_schema"  #<----- CREATE VARIABLE 
+    DB = "arbortrary_schema"  #<----- CREATE VARIABLE 
 
     def __init__(self, data): #<---- INITIATE FUNCTION TO CREATE THE OBJECT AND VAIDATES THE USER.
         self.id = data['id']
@@ -23,14 +24,14 @@ class User: #<----- MODEL CLASS
     @staticmethod       
     def validate_user(user):
         is_valid = True # we assume this is true
-        if len(user['first_name']) < 3:
-            flash("First name must be at least 3 characters.")
+        if len(user['first_name']) < 2:
+            flash("First name must be at least 2 characters.")
             is_valid = False
-        if len(user['last_name']) < 3:
-            flash("Last name must be at least 3 characters.")
+        if len(user['last_name']) < 2:
+            flash("Last name must be at least 2 characters.")
             is_valid = False
-        if len(user['password']) < 4:
-            flash("Password must be at least 4 characters or more.")
+        if len(user['password']) < 8:
+            flash("Password must be at least 8 characters or more.")
             is_valid = False
         if not EMAIL_REGEX.match(user['email']):
             flash("Please enter valid email address.")
@@ -41,11 +42,11 @@ class User: #<----- MODEL CLASS
     @staticmethod  
     def validateUpdate(user): #<--- USED FOR VALIDATING USER IN ORDER TO UPDATE INFO
         is_valid = True
-        if len(user['first_name']) < 3:
-            flash("First name must be at least 3 characters.")
+        if len(user['first_name']) < 2:
+            flash("First name must be at least 2 characters.")
             is_valid = False
-        if len(user['last_name']) < 3:
-            flash("Last name must be at least 3 characters.")
+        if len(user['last_name']) < 2:
+            flash("Last name must be at least 2 characters.")
             is_valid = False
         return is_valid
     
@@ -95,13 +96,31 @@ class User: #<----- MODEL CLASS
         print("HERE------->", data)
         return connectToMySQL(cls.DB).query_db(query,data)
     
-    # the delete method will be used when we need to delete an user from our database
-    # @classmethod #<----- DELETE METHOD
-    # def delete(cls, user_id): #<---- ADD CLASS AND ID INTO PARAMETER
-    #     query  = """DELETE FROM users 
-    #     WHERE id = %(id)s;
-    #     """ #<--- THIS WILL DELETE ENTIRE ROW BY SELECTING ID
-    #     data = {"id": id}
-    #     return connectToMySQL(cls.DB).query_db(query, data)
-    
+@classmethod
+def get_user_with_trees( cls , data ):
+        query = """SELECT *
+                FROM users
+                JOIN trees
+                ON users.id = trees.users_id
+                WHERE users.id = %(user_id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db( query , data )
+
+        one_user = cls(result[0])
+        
+        for row in result:
+
+            tree_data = {
+                "id" : row['trees.id'],
+                "species" : row['species'],
+                "location" : row['location'],
+                "reason" : row['reason'],
+                "date_planted" : row['date_planted'],
+                "created_at" : row['trees.created_at'],
+                "updated_at" : row['trees.updated_at']
+            }
+        
+        one_user.trees.append(tree_model.Tree(tree_data))
+
+        return one_user
 

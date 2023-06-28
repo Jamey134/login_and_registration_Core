@@ -1,5 +1,5 @@
 from flask_app import app
-from flask_app.controllers import user_controller, sasquatch_controller
+from flask_app.controllers import tree_controller, user_controller
 
 
 

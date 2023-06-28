@@ -2,8 +2,8 @@ from flask_app import app
 from flask import render_template, redirect, request, session, flash
 from flask_bcrypt import Bcrypt
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask_app.model.user_model import User
-from flask_app.model.sasquatch_model import Sasquatch
+from flask_app.models.user_model import User
+from flask_app.models.tree_model import Tree
 bcrypt = Bcrypt(app)
 
 #App Routing means mapping the URLs to a specific function that will handle the logic for that URL.
@@ -57,6 +57,14 @@ def logout():
     session.clear()
     return redirect('/')
 
+@app.route('/myTrees')
+def manageMyTrees():
+        if "id" not in session:
+            flash("PLEASE LOGIN!")
+        return redirect('/')
+        one_user = User.get_user_with_trees({"user_id":session['user_id']})
+        return render_template('MyTree.html', one_user=one_user)
+
 #==============EXTRA ROUTES FOR FUTURE EXAM===========
 @app.route('/user/edit/')
 def editUser():
@@ -78,4 +86,10 @@ def updateUser():
     User.edit(userData) #<--- CALLING THE FUNCTION FROM CLASS AND ENTERING DATA IN PARAMETER
     return redirect('/testSuccess')#<--- REROUTE TO DASHBOARD.HTML
 
+@app.route('/user/delete/<int:user_id>') #<--- Add ID in parameter to target a specific user
+def delete(user_id): #<--- ADD ID INTO PARAMETER
+    if "user_id" not in session:
+        return redirect('/') 
+    User.delete(user_id) #<--- Calling the function targeting user_id's
+    return redirect('/') #<--- TAKES US BACK TO HOMEPAGE
 

@@ -1,0 +1,1 @@
+SELECT * FROM arbortrary_schema.users;

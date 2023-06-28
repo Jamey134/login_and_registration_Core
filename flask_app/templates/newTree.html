@@ -18,8 +18,11 @@
 
 <body>
     <div class="d-flex p-2 bd-highlight justify-content-between">
-        <h1>Sasquatch Websightings</h1>
-        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h1>Arbortrary</h1>
+        <h2>Welcome {{user.first_name}} {{user.last_name}}!</h2>
+    </div>
+    <p>A site to track randomly planted trees.</p>
+    <a href="#">My trees</a>
     </div>
     <div class="align-items-end gap-5 p-3">
         <a href="/dashboard">Dashboard</a>
@@ -27,32 +30,30 @@
     </div>
     <div class="d-flex justify-content-between p-3">
         <div class="d-flex flex-column">
-            <h1>Report A Sighting</h1>
-            <p class="text-danger">Description must not be blank</p>
+            <h1>Arbitrarily Plant a Tree</h1>
         </div>
     </div>
 
-    <form action="/addSighting" method="POST">
-        <input type="hidden" name="user_id" value="{{session['id']}}"> 
+    <form action="/addTree" method="POST">
+        <input type="hidden" name="users_id" value="{{session['id']}}"> 
         <div class="col-4">
+            <div class="d-flex justify-content-between gap-3 mb-3">
+                <label for="species">Species:</label>
+                <input type="text" name="species" class="form-control">
+            </div>
             <div class="d-flex justify-content-between gap-3 mb-3">
                 <label for="location">Location:</label>
                 <input type="text" name="location" class="form-control">
             </div>
             <div class="d-flex justify-content-between gap-3 mb-3">
-                <label for="num_of_sasquatches"># of Sasquatches:</label>
-                <input type="number" name="num_of_sasquatches" class="form-control">
+                <label for="reason">Reason:</label>
+                <textarea name="reason" cols="80" rows="5"></textarea>
             </div>
             <div class="d-flex justify-content-between gap-3 mb-3">
-                <label for="date_of_sighting">Date of Sighting:</label>
-                <input type="date" name="date_of_sighting" class="form-control">
+                <label for="date_planted">Date Planted:</label>
+                <input type="date" name="date_planted" class="form-control">
             </div>
-            <div class="d-flex justify-content-between gap-3 mb-3">
-                <label for="what_happened">What Happened:</label>
-                <br>
-                <textarea name="what_happened" cols="50" rows="5"></textarea>
-            </div>
-            <input class="btn btn-primary" type="submit" value="Report">
+            <input class="btn btn-primary" type="submit" value="Plant">
     </form>
     <div>
         {% with messages = get_flashed_messages() %}
